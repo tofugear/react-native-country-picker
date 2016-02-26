@@ -1,0 +1,27 @@
+{
+  "name": "country-picker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roomorama/AndroidCountryPicker.git"
+  },
+  "version": "0.1.0",
+  "description": "A React Native module that allows you to use pick a country",
+  "author": "Roomorama",
+  "contributors": [
+    {
+      "name": "Roomorama"
+    }
+  ],
+  "nativePackage": true,
+  "keywords": [
+    "react-native",
+    "country-picker",
+    "react",
+    "native",
+    "country",
+    "picker"
+  ],
+  "devDependencies": {
+    "react-native": "^0.19.0"
+  }
+}
