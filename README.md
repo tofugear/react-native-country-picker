@@ -1,21 +1,16 @@
-# React Native Toast (remobile)
-A android like toast for react-native support for ios and android
+# React Native Country Picker
+A country picker for react-native support for android
 
 ## Installation
 ```sh
-npm install react-native-toast --save
+npm install react-native-country-picker --save
 ```
-
-### Installation (iOS)
-* Drag RCTToast.xcodeproj to your project on Xcode.
-* Click on your main project file (the one that represents the .xcodeproj) select Build Phases and drag libRCTToast.a from the Products folder inside the RCTToast.xcodeproj.
-* Look for Header Search Paths and make sure it contains both $(SRCROOT)/../react-native/React as recursive.
 
 ### Installation (Android)
 ```gradle
 ...
-include ':react-native-toast'
-project(':react-native-toast').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-toast/android')
+include ':react-native-country-picker'
+project(':react-native-country-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-country-picker/android')
 ```
 
 * In `android/app/build.gradle`
@@ -24,14 +19,14 @@ project(':react-native-toast').projectDir = new File(rootProject.projectDir, '..
 ...
 dependencies {
     ...
-    compile project(':react-native-toast')
+    compile project(':react-native-country-picker')
 }
 ```
 
 * register module (in MainActivity.java)
 
 ```java
-import com.remobile.toast.*;  // <--- import
+import com.tofugear.countrypicker.*;  // <--- import
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
   ......
@@ -45,7 +40,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
       .setBundleAssetName("index.android.bundle")
       .setJSMainModuleName("index.android")
       .addPackage(new MainReactPackage())
-      .addPackage(new RCTToastPackage())              // <------ add here
+      .addPackage(new CountryPickerPackage())              // <------ add here
       .setUseDeveloperSupport(BuildConfig.DEBUG)
       .setInitialLifecycleState(LifecycleState.RESUMED)
       .build();
@@ -60,7 +55,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 ```
 
 ### Screencasts
-![ios](https://github.com/remobile/react-native-toast/blob/master/screencasts/ios.gif)
+See ![AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker)
 
 ## Usage
 
@@ -73,33 +68,27 @@ var {
     Image
 } = React;
 
-var Toast = require('react-native-toast');
+var CountryPicker = require('react-native-country-picker');
 var Button = require('react-native-simple-button');
 
 module.exports = React.createClass({
+    getInitialState() {
+        return { code: null };
+    },
+
+    getSelectedCountry() {
+        var _this = this;
+        CountryPicker.show(function(country){
+            _this.setState({ code: country.code });
+        });
+    },
+
     render() {
         return (
             <View style={styles.container}>
-                <Button onPress={Toast.show.bind(null, "this is a message")}>
-                    show
-                </Button>
-                <Button onPress={Toast.showShortTop.bind(null, "this is a message")}>
-                    showShortTop
-                </Button>
-                <Button onPress={Toast.showShortCenter.bind(null, "this is a message")}>
-                    showShortCenter
-                </Button>
-                <Button onPress={Toast.showShortBottom.bind(null, "this is a message")}>
-                    showShortBottom
-                </Button>
-                <Button onPress={Toast.showLongTop.bind(null, "this is a message")}>
-                    showLongTop
-                </Button>
-                <Button onPress={Toast.showLongCenter.bind(null, "this is a message")}>
-                    showLongCenter
-                </Button>
-                <Button onPress={Toast.showLongBottom.bind(null, "this is a message")}>
-                    showLongBottom
+                <Text>{this.state.code}</Text>
+                <Button onPress={this.getSelectedCountry.bind(this)}>
+                    Launch Country Picker
                 </Button>
             </View>
         );
@@ -118,9 +107,5 @@ var styles = StyleSheet.create({
 });
 ```
 
-### HELP
-* look https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin
-
-
 ### thanks
-* this project come from https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin
+* Thanks to ![roomorama](https://github.com/roomorama) for the ![AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker) Java Fragment code.
