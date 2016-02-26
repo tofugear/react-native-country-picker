@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 ```
 
 ### Screencasts
-See ![AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker)
+See [AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker)
 
 ## Usage
 
@@ -108,4 +108,4 @@ var styles = StyleSheet.create({
 ```
 
 ### thanks
-* Thanks to ![roomorama](https://github.com/roomorama) for the ![AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker) Java Fragment code.
+* Thanks to [roomorama](https://github.com/roomorama) for the [AndroidCountryPicker](https://github.com/roomorama/AndroidCountryPicker) Java Fragment code.
