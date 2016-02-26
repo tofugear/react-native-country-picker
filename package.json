@@ -1,80 +1,18 @@
 {
-  "_args": [
-    [
-      "country-picker",
-      "/Users/cloudgen/workspace/react-native/CountryPickerTest"
-    ]
-  ],
-  "_from": "country-picker@latest",
-  "_id": "country-picker@1.0.1",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/country-picker",
-  "_nodeVersion": "4.1.1",
-  "_npmUser": {
-    "email": "42550564@qq.com",
-    "name": "fov42550564"
-  },
-  "_npmVersion": "2.14.4",
-  "_phantomChildren": {},
-  "_requested": {
-    "name": "country-picker",
-    "raw": "country-picker",
-    "rawSpec": "",
-    "scope": null,
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/react-native-toast/-/react-native-toast-1.0.1.tgz",
-  "_shasum": "9fd21cb4bf7f71e226969aeba7cf8afee9618052",
-  "_shrinkwrap": null,
-  "_spec": "country-picker",
-  "_where": "/Users/cloudgen/workspace/react-native/CountryPickerTest",
-  "author": {
-    "email": "42550564@qq.com",
-    "name": "YunJiang.Fang"
-  },
-  "bugs": {
-    "url": "https://github.com/remobile/react-native-toast/issues"
-  },
-  "dependencies": {},
-  "description": "A android like toast for react-native support for ios and android",
-  "devDependencies": {},
-  "directories": {},
-  "dist": {
-    "shasum": "9fd21cb4bf7f71e226969aeba7cf8afee9618052",
-    "tarball": "http://registry.npmjs.org/react-native-toast/-/react-native-toast-1.0.1.tgz"
-  },
-  "gitHead": "3bf7efcad34c396df4602c71e383475f84a61e8c",
-  "homepage": "https://github.com/remobile/react-native-toast",
-  "keywords": [
-    "android",
-    "ios",
-    "mobile",
-    "position",
-    "react-component",
-    "react-native",
-    "remobile",
-    "toast"
-  ],
-  "license": "MIT",
+  "name": "react-native-country-picker",
+  "version": "1.0.2",
+  "description": "React Native Country Picker",
   "main": "index.js",
-  "maintainers": [
-    {
-      "name": "fov42550564",
-      "email": "42550564@qq.com"
-    }
-  ],
-  "name": "country-picker",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git://github.com/remobile/react-native-toast.git"
+    "url": "git+https://github.com/tofugear/react-native-country-picker.git"
   },
-  "scripts": {},
-  "version": "1.0.1"
+  "keywords": [
+    "react-native",
+    "android",
+    "react-component",
+    "country-picker"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/tofugear/react-native-country-picker#readme"
 }
