@@ -16,16 +16,11 @@ import java.util.List;
 import com.tofugear.countrypicker.CountryPickerModule;
 
 public class CountryPickerPackage implements ReactPackage {
-  private Activity mActivity = null;
-
-  public CountryPickerPackage(Activity activity){
-      mActivity = activity;
-  }
 
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(
-              new CountryPickerModule(reactContext,mActivity)
+              new CountryPickerModule(reactContext)
       );
   }
 
