@@ -37,7 +37,7 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
     }
 
     @ReactMethod
-    public void show( final Callback callback) throws Exception {
+    public void show(final String title, final String codes, final Callback callback) throws Exception {
         if (this.isPaused) {
             return;
         }
@@ -48,24 +48,24 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
         }
 
         UiThreadUtil.runOnUiThread(new Runnable() {
-                public void run() {
-                    final CountryPicker picker = CountryPicker.newInstance("Select Country");
-                    picker.setListener(new CountryPickerListener() {
-                        @Override
-                        public void onSelectCountry(String name, String code, String phoneCode) {
-                            WritableMap response= Arguments.createMap();
+            public void run() {
+                final CountryPicker picker = CountryPicker.newInstance(title, codes);
+                picker.setListener(new CountryPickerListener() {
+                    @Override
+                    public void onSelectCountry(String name, String code, String phoneCode) {
+                        WritableMap response= Arguments.createMap();
 
-                            picker.dismiss();
-                            response.putString("name",name);
-                            response.putString("code",code);
-                            response.putString("phoneCode",phoneCode);
+                        picker.dismiss();
+                        response.putString("name",name);
+                        response.putString("code",code);
+                        response.putString("phoneCode",phoneCode);
 
-                            callback.invoke(response);
-                          }
-                    });
-                    mostRecentCountryPicker = picker;
-                    picker.show(currentActivity.getFragmentManager(), "COUNTRY_PICKER");
-                }
+                        callback.invoke(response);
+                    }
+                });
+                mostRecentCountryPicker = picker;
+                picker.show(currentActivity.getFragmentManager(), "COUNTRY_PICKER");
+            }
         });
     }
 

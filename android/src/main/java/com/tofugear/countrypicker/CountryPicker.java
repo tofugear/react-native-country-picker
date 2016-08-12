@@ -132,6 +132,42 @@ public class CountryPicker extends DialogFragment implements
 	}
 
 	/**
+	 * move the countries in the preferred list to top
+	 *
+	 * @param preferredList
+	 * @return
+	 */
+	private void setPreferredCountries(String preferredList) {
+		if(preferredList != null && !preferredList.isEmpty()) {
+			String[] codes = preferredList.split(" ");
+
+			// get code list
+			ArrayList<String> codeList =new ArrayList<>();
+			Iterator<Country> keys = allCountriesList.iterator();
+			while(keys.hasNext()) {
+				Country country = (Country) keys.next();
+				codeList.add(country.getCode());
+			}
+
+			ArrayList<Country> preferredCountries = new ArrayList<>();
+			// find index of certain country
+			for(String code: codes) {
+				int index = codeList.indexOf(code);
+				Country country = allCountriesList.get(index);
+				preferredCountries.add(country);
+			}
+			// remove those countries and add to top
+			for(int i=preferredCountries.size()-1; i >= 0; i--) {
+				allCountriesList.remove(preferredCountries.get(i));
+				allCountriesList.add(0, preferredCountries.get(i));
+			}
+			// Initialize selected countries with all countries
+			selectedCountriesList = new ArrayList<Country>();
+			selectedCountriesList.addAll(allCountriesList);
+		}
+	}
+
+	/**
 	 * R.string.countries is a json string which is Base64 encoded to avoid
 	 * special characters in XML. It's Base64 decoded here to get original json.
 	 *
@@ -152,10 +188,11 @@ public class CountryPicker extends DialogFragment implements
 	 * @param dialogTitle
 	 * @return
 	 */
-	public static CountryPicker newInstance(String dialogTitle) {
+	public static CountryPicker newInstance(String dialogTitle, String preferredCountryCodes) {
 		CountryPicker picker = new CountryPicker();
 		Bundle bundle = new Bundle();
 		bundle.putString("dialogTitle", dialogTitle);
+		bundle.putString("preferredCountryCodes", preferredCountryCodes);
 		picker.setArguments(bundle);
 		return picker;
 	}
@@ -175,6 +212,10 @@ public class CountryPicker extends DialogFragment implements
 		// Set dialog title if show as dialog
 		Bundle args = getArguments();
 		if (args != null) {
+			// get preferred country codes
+			String codes=args.getString("preferredCountryCodes");
+			setPreferredCountries(codes);
+
 			String dialogTitle = args.getString("dialogTitle");
 			getDialog().setTitle(dialogTitle);
 
