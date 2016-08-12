@@ -37,7 +37,7 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
     }
 
     @ReactMethod
-    public void show(final String title, final String codes, final Callback callback) throws Exception {
+    public void show(final String title, final String searchHintText, final String preferredCountryCodes, final Callback callback) throws Exception {
         if (this.isPaused) {
             return;
         }
@@ -49,7 +49,7 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
 
         UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
-                final CountryPicker picker = CountryPicker.newInstance(title, codes);
+                final CountryPicker picker = CountryPicker.newInstance(title, searchHintText, preferredCountryCodes);
                 picker.setListener(new CountryPickerListener() {
                     @Override
                     public void onSelectCountry(String name, String code, String phoneCode) {

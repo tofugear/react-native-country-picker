@@ -138,26 +138,26 @@ public class CountryPicker extends DialogFragment implements
 	 * @return
 	 */
 	private void setPreferredCountries(String preferredList) {
-		if(preferredList != null && !preferredList.isEmpty()) {
+		if (preferredList != null && !preferredList.isEmpty()) {
 			String[] codes = preferredList.split(" ");
 
 			// get code list
-			ArrayList<String> codeList =new ArrayList<>();
+			ArrayList<String> codeList = new ArrayList<>();
 			Iterator<Country> keys = allCountriesList.iterator();
-			while(keys.hasNext()) {
+			while (keys.hasNext()) {
 				Country country = (Country) keys.next();
 				codeList.add(country.getCode());
 			}
 
 			ArrayList<Country> preferredCountries = new ArrayList<>();
 			// find index of certain country
-			for(String code: codes) {
+			for (String code: codes) {
 				int index = codeList.indexOf(code);
 				Country country = allCountriesList.get(index);
 				preferredCountries.add(country);
 			}
 			// remove those countries and add to top
-			for(int i=preferredCountries.size()-1; i >= 0; i--) {
+			for (int i = preferredCountries.size()-1; i >= 0; i--) {
 				allCountriesList.remove(preferredCountries.get(i));
 				allCountriesList.add(0, preferredCountries.get(i));
 			}
@@ -186,12 +186,15 @@ public class CountryPicker extends DialogFragment implements
 	 * To support show as dialog
 	 *
 	 * @param dialogTitle
+	 * @param searchHint
+	 * @param preferredCountryCodes
 	 * @return
 	 */
-	public static CountryPicker newInstance(String dialogTitle, String preferredCountryCodes) {
+	public static CountryPicker newInstance(String dialogTitle, String searchHint, String preferredCountryCodes) {
 		CountryPicker picker = new CountryPicker();
 		Bundle bundle = new Bundle();
 		bundle.putString("dialogTitle", dialogTitle);
+		bundle.putString("searchHint", searchHint);
 		bundle.putString("preferredCountryCodes", preferredCountryCodes);
 		picker.setArguments(bundle);
 		return picker;
@@ -209,6 +212,8 @@ public class CountryPicker extends DialogFragment implements
 		// Get countries from the json
 		getAllCountries();
 
+		String searchHint ="Search";
+
 		// Set dialog title if show as dialog
 		Bundle args = getArguments();
 		if (args != null) {
@@ -218,6 +223,8 @@ public class CountryPicker extends DialogFragment implements
 
 			String dialogTitle = args.getString("dialogTitle");
 			getDialog().setTitle(dialogTitle);
+
+			searchHint = args.getString("searchHint");
 
 			int width = getResources().getDimensionPixelSize(
 					R.dimen.cp_dialog_width);
@@ -229,6 +236,8 @@ public class CountryPicker extends DialogFragment implements
 		// Get view components
 		searchEditText = (EditText) view
 				.findViewById(R.id.country_picker_search);
+		// set hint text
+		searchEditText.setHint(searchHint);
 		countryListView = (ListView) view
 				.findViewById(R.id.country_picker_listview);
 
