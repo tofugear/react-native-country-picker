@@ -100,7 +100,11 @@ public class CountryListAdapter extends BaseAdapter {
 		// Load drawable dynamically from country code
 		String drawableName = "flag_"
 				+ country.getCode().toLowerCase(Locale.ENGLISH);
-		cell.imageView.setImageResource(getResId(drawableName));
+		int flagResId = getResId(drawableName);
+		if (flagResId == -1) {
+			flagResId = getResId("globe_icon");  // Fallback
+		}
+		cell.imageView.setImageResource(flagResId);
 		return cellView;
 	}
 
