@@ -78,7 +78,12 @@ module.exports = React.createClass({
 
     getSelectedCountry() {
         var _this = this;
-        CountryPicker.show(function(country){
+        CountryPicker.show({
+          title: 'Title',
+          searchHintText: 'Search',
+          preferredCountryCocde: 'HK JP',
+          countryList: ['HK|+852|Hong Kong', 'JP|...'],  // Optional
+          function(country){
             _this.setState({ code: country.code });
         });
     },

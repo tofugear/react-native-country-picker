@@ -9,8 +9,8 @@ var RNCountryPicker= NativeModules.CountryPicker;
 var CountryPicker = {};
 
 
-CountryPicker.show = function (title, searchHint, codes, callBack) {
-  NativeModules.CountryPicker.show(title, searchHint, codes, callBack);
+CountryPicker.show = function (configs, callBack) {
+  NativeModules.CountryPicker.show(configs, callBack);
 };
 
 CountryPicker.hide = function () {

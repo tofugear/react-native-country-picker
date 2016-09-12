@@ -1,10 +1,6 @@
 package com.tofugear.countrypicker;
 
-import android.view.Gravity;
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.widget.Toast;
-import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.NativeModule;
@@ -12,13 +8,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.UiThreadUtil;
 
-
-import com.tofugear.countrypicker.CountryPicker;
+import java.util.ArrayList;
 
 public class CountryPickerModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     private CountryPicker mostRecentCountryPicker;
@@ -37,11 +34,10 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
     }
 
     @ReactMethod
-    public void show(final String title, final String searchHintText, final String preferredCountryCodes, final Callback callback) throws Exception {
+    public void show(final ReadableMap configs, final Callback callback) throws Exception {
         if (this.isPaused) {
             return;
         }
-
         final Activity currentActivity = getCurrentActivity();
         if (currentActivity == null) {
             return;
@@ -49,7 +45,20 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
 
         UiThreadUtil.runOnUiThread(new Runnable() {
             public void run() {
-                final CountryPicker picker = CountryPicker.newInstance(title, searchHintText, preferredCountryCodes);
+                ArrayList<String> countries = null;
+                if (configs.hasKey("countryList")) {
+                    final ReadableArray countryList = configs.getArray("countryList");
+                    countries = new ArrayList<>(countryList.size());
+                    for (int i = 0; i < countryList.size(); ++i) {
+                        // In the format of: code|phone|name
+                        countries.add(countryList.getString(i));
+                    }
+                }
+                final CountryPicker picker = CountryPicker.newInstance(
+                        configs.getString("title"),
+                        configs.getString("searchHintText"),
+                        configs.getString("preferredCountryCodes"),
+                        countries);
                 picker.setListener(new CountryPickerListener() {
                     @Override
                     public void onSelectCountry(String name, String code, String phoneCode) {

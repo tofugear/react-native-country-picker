@@ -63,43 +63,18 @@ public class CountryPicker extends DialogFragment implements
 		this.listener = listener;
 	}
 
-	public EditText getSearchEditText() {
-		return searchEditText;
-	}
-
-	public ListView getCountryListView() {
-		return countryListView;
-	}
-
 	/**
-	 * Convenient function to get currency code from country code currency code
-	 * is in English locale
-	 *
-	 * @param countryCode
-	 * @return
-	 */
-	public static Currency getCurrencyCode(String countryCode) {
-		try {
-			return Currency.getInstance(new Locale("en", countryCode));
-		} catch (Exception e) {
-
-		}
-		return null;
-	}
-
-	/**
-	 * Get all countries with code and name from res/raw/countries.json
+	 * Set all countries with code and name from res/raw/countries.json
 	 *
 	 * @return
 	 */
-	private List<Country> getAllCountries() {
+	private List<Country> setAllCountriesFromJSON() {
 		if (allCountriesList == null) {
 			try {
 				allCountriesList = new ArrayList<Country>();
 
 				// Read from local file
 				String allCountriesString = readFileAsString(getActivity());
-				Log.d("countrypicker", "country: " + allCountriesString);
 				JSONObject jsonObject = new JSONObject(allCountriesString);
 				Iterator<?> keys = jsonObject.keys();
 
@@ -129,6 +104,30 @@ public class CountryPicker extends DialogFragment implements
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Set all countries from the country list given
+	 *
+	 * Per entry in the format of: code|phone|name
+	 */
+	private void setAllCountries(ArrayList<String> countries) {
+		if (allCountriesList != null)
+			return;
+		allCountriesList = new ArrayList<Country>();
+		for (String country_s: countries) {
+			String[] parts = country_s.split("\\|");
+			Country country = new Country();
+			country.setCode(parts[0]);
+			country.setPhoneCode(parts[1]);
+			country.setName(parts[2]);
+			allCountriesList.add(country);
+		}
+		// Sort the all countries list based on country name
+		Collections.sort(allCountriesList, this);
+		// Initialize selected countries with all countries
+		selectedCountriesList = new ArrayList<Country>();
+		selectedCountriesList.addAll(allCountriesList);
 	}
 
 	/**
@@ -185,17 +184,24 @@ public class CountryPicker extends DialogFragment implements
 	/**
 	 * To support show as dialog
 	 *
-	 * @param dialogTitle
-	 * @param searchHint
-	 * @param preferredCountryCodes
-	 * @return
+	 * @param dialogTitle The title
+	 * @param searchHint The hint placeholder to show
+	 * @param preferredCountryCodes List of preferred codes, delimited by space
+	 * @praam countries Optional list of countries to be used. Default list is used if not provided
+	 *
+	 * @return New instance of the CountryPicker
 	 */
-	public static CountryPicker newInstance(String dialogTitle, String searchHint, String preferredCountryCodes) {
+	public static CountryPicker newInstance(
+			String dialogTitle,
+			String searchHint,
+			String preferredCountryCodes,
+			ArrayList<String> countries) {
 		CountryPicker picker = new CountryPicker();
 		Bundle bundle = new Bundle();
 		bundle.putString("dialogTitle", dialogTitle);
 		bundle.putString("searchHint", searchHint);
 		bundle.putString("preferredCountryCodes", preferredCountryCodes);
+		bundle.putStringArrayList("countries", countries);
 		picker.setArguments(bundle);
 		return picker;
 	}
@@ -209,29 +215,26 @@ public class CountryPicker extends DialogFragment implements
 		// Inflate view
 		View view = inflater.inflate(R.layout.country_picker, null);
 
-		// Get countries from the json
-		getAllCountries();
-
-		String searchHint ="Search";
-
-		// Set dialog title if show as dialog
 		Bundle args = getArguments();
-		if (args != null) {
-			// get preferred country codes
-			String codes=args.getString("preferredCountryCodes");
-			setPreferredCountries(codes);
-
-			String dialogTitle = args.getString("dialogTitle");
-			getDialog().setTitle(dialogTitle);
-
-			searchHint = args.getString("searchHint");
-
-			int width = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_width);
-			int height = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_height);
-			getDialog().getWindow().setLayout(width, height);
+		if (args.getStringArrayList("countries") != null) {
+			setAllCountries(args.getStringArrayList("countries"));
+		} else {
+			setAllCountriesFromJSON();
 		}
+
+		String codes = args.getString("preferredCountryCodes");
+		setPreferredCountries(codes);
+
+		String dialogTitle = args.getString("dialogTitle");
+		getDialog().setTitle(dialogTitle);
+
+		String searchHint = args.getString("searchHint");
+
+		int width = getResources().getDimensionPixelSize(
+				R.dimen.cp_dialog_width);
+		int height = getResources().getDimensionPixelSize(
+				R.dimen.cp_dialog_height);
+		getDialog().getWindow().setLayout(width, height);
 
 		// Get view components
 		searchEditText = (EditText) view
@@ -247,7 +250,6 @@ public class CountryPicker extends DialogFragment implements
 
 		// Inform listener
 		countryListView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -261,7 +263,6 @@ public class CountryPicker extends DialogFragment implements
 
 		// Search for which countries matched user query
 		searchEditText.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
