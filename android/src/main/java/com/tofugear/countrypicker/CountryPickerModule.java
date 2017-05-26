@@ -51,7 +51,10 @@ public class CountryPickerModule extends ReactContextBaseJavaModule implements L
                     countries = new ArrayList<>(countryList.size());
                     for (int i = 0; i < countryList.size(); ++i) {
                         // In the format of: code|phone|name
-                        countries.add(countryList.getString(i));
+                        String country = countryList.getString(i);
+                        if (country != null) {
+                          countries.add(country);
+                        }
                     }
                 }
                 final CountryPicker picker = CountryPicker.newInstance(
